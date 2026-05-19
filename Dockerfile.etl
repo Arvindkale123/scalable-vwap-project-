@@ -1,0 +1,17 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir requests psycopg2-binary pydantic python-dotenv
+
+# Copy application code
+COPY src/etl_pipeline.py .
+COPY src/requirements.txt .
+COPY .env .
+
+# Install requirements
+RUN pip install --no-cache-dir -r src/requirements.txt 2>/dev/null || true
+
+# Run ETL pipeline
+CMD ["python", "etl_pipeline.py"]
